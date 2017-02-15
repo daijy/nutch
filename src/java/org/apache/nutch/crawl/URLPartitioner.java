@@ -42,6 +42,7 @@ public class URLPartitioner implements Partitioner<Text, Writable> {
   public static final String PARTITION_MODE_HOST = "byHost";
   public static final String PARTITION_MODE_DOMAIN = "byDomain";
   public static final String PARTITION_MODE_IP = "byIP";
+  public static final String PARTITION_MODE_URL = "byURL";
 
   private int seed;
   private URLNormalizers normalizers;
@@ -52,7 +53,7 @@ public class URLPartitioner implements Partitioner<Text, Writable> {
     mode = job.get(PARTITION_MODE_KEY, PARTITION_MODE_HOST);
     // check that the mode is known
     if (!mode.equals(PARTITION_MODE_IP) && !mode.equals(PARTITION_MODE_DOMAIN)
-        && !mode.equals(PARTITION_MODE_HOST)) {
+        && !mode.equals(PARTITION_MODE_HOST) && !mode.equals(PARTITION_MODE_URL)) {
       LOG.error("Unknown partition mode : " + mode + " - forcing to byHost");
       mode = PARTITION_MODE_HOST;
     }
@@ -71,7 +72,11 @@ public class URLPartitioner implements Partitioner<Text, Writable> {
       urlString = normalizers.normalize(urlString,
           URLNormalizers.SCOPE_PARTITION);
       url = new URL(urlString);
-      hashCode = url.getHost().hashCode();
+      if (mode.equals(PARTITION_MODE_URL)) {
+          hashCode = url.toString().hashCode();
+      } else {
+          hashCode = url.getHost().hashCode();
+      }
     } catch (MalformedURLException e) {
       LOG.warn("Malformed URL: '" + urlString + "'");
     }
