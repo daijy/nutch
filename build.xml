@@ -1051,6 +1051,7 @@
         <source path="${plugins.dir}/parse-js/src/java/" />
         <source path="${plugins.dir}/parse-metatags/src/java/" />
         <source path="${plugins.dir}/parse-metatags/src/test/" />
+        <source path="${plugins.dir}/parse-googleplay/src/java/" />
         <source path="${plugins.dir}/parse-swf/src/java/" />
         <source path="${plugins.dir}/parse-swf/src/test/" />
         <source path="${plugins.dir}/parse-tika/src/java/" />
